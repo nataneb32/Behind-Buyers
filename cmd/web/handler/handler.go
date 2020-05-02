@@ -3,6 +3,8 @@ package handler
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
+	"html/template"
 	"net/http"
 	"time"
 
@@ -57,7 +59,12 @@ func (h *Handler) Index(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) IndexT(w http.ResponseWriter, r *http.Request) {
-	chart := h.accessPlotter.PlotChartAccessOfPage("test", 0, int(time.Now().UnixNano()/1e6), 1000*60*60)
-	response, _ := json.Marshal(chart)
-	w.Write(response)
+	chart := h.accessPlotter.PlotChartAccessOfPage("test", 0, int(time.Now().UnixNano()/1e6), 1000*60)
+	t, err := template.New("index.html").ParseFiles("./templates/index.gohtml")
+	if err != nil {
+		fmt.Println(err, t)
+		return
+	}
+	_ = t.ExecuteTemplate(w, "chart", chart)
+
 }

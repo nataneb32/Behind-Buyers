@@ -1,0 +1,73 @@
+@font-face {
+  font-family: "Jost";
+  src: url("static/fonts/Jost-Regular.ttf");
+  }
+@font-face {
+  font-family: "SourceSans";
+  src: url("static/fonts/SourceSansPro-Regular.ttf");
+  }
+
+html, body {
+  width: 100%;
+  min-height: 100%;
+  padding: 0;
+  margin: 0;
+  font-family: "Jost";
+}
+
+body {
+  display: flex;
+}
+
+.sidebar {
+  height: 100vh;
+  position: sticky;
+  top:0;
+  flex: 1;
+  background: hsl(220,60%,19.6%);
+  color: hsl(220,20%,90%);
+}
+
+.sidebar ul li {
+  list-style: none;
+  padding: 10px;
+}
+
+.sidebar ul{
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 10px;
+}
+
+.content {
+  flex: 5;
+  padding: 10px;
+}
+
+.row {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+}
+
+.graph-1{
+  flex: 1;
+  height: 45vh;
+  margin: 2.5vh;
+  border: 1px solid hsl(185.3,100%,31%);
+}
+
+.graph-2{
+  flex: 1;
+  height: 45vh;
+  margin: 2.5vh;
+  border: 1px solid hsl(185.3,100%,31%);
+}
+
+.graph-3{
+  flex: 1;
+  height: 45vh;
+  margin: 2.5vh;
+  border: 1px solid hsl(185.3,100%,31%);
+}
