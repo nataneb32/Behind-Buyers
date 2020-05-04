@@ -1,7 +1,7 @@
 package observer
 
 type Listener interface {
-	Notify(field string, value interface{})
+	Notify(report map[string]interface{})
 }
 
 type ReportObserver struct {
@@ -13,10 +13,8 @@ func (r *ReportObserver) Subscribe(a Listener) {
 }
 
 func (r *ReportObserver) Report(report map[string]interface{}) {
-	for field, value := range report {
-		for _, analytics := range r.analytics {
-			analytics.Notify(field, value)
-		}
+	for _, analytics := range r.analytics {
+		analytics.Notify(report)
 	}
 }
 

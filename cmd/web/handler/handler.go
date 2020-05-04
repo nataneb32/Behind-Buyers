@@ -8,7 +8,10 @@ import (
 	"net/http"
 	"time"
 
+	"../../../pkg/times_accessed"
+
 	"../../../pkg/access"
+	"../../../pkg/click"
 
 	"../../../pkg/report/observer"
 	"../../../pkg/storage"
@@ -17,6 +20,8 @@ import (
 type Handler struct {
 	reportObserver *observer.ReportObserver
 	access         *access.Listener
+	times_accessed *times_accessed.Listener
+	click          *click.Listener
 	accessPlotter  *access.Plotter
 	s              storage.Storage
 }
@@ -43,17 +48,21 @@ func NewHandler() *Handler {
 	h := &Handler{
 		reportObserver: observer.CreateReportObserver(),
 		access:         access.CreateListener(s),
+		times_accessed: times_accessed.CreateListener(s),
+		click:          click.CreateListener(s),
 		accessPlotter:  access.NewPlotter(s),
 		s:              s,
 	}
 
 	h.reportObserver.Subscribe(h.access)
+	h.reportObserver.Subscribe(h.times_accessed)
+	h.reportObserver.Subscribe(h.click)
 
 	return h
 }
 
 func (h *Handler) Index(w http.ResponseWriter, r *http.Request) {
-	chart := h.accessPlotter.PlotChartAccessOfPage("test", 0, int(time.Now().UnixNano()/1e6), 1000*60*60)
+	chart := h.s.GetRaw()
 	response, _ := json.Marshal(chart)
 	w.Write(response)
 }

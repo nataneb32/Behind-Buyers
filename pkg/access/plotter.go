@@ -2,15 +2,22 @@ package access
 
 import "../storage"
 
+type Chart struct {
+	Label []int
+	Data  []int
+}
+
 type Plotter struct {
 	s storage.Storage
 }
 
 func (a *Plotter) PlotChartAccessOfPage(page string, from int, to int, steps int32) Chart { // Isso deveria sair daqui. Criar um PlotterClass
 	accesses, ok := a.s.Read("access").(map[string]Accesses)
+
 	if !ok {
 		return Chart{Label: []int{}, Data: []int{}}
 	}
+
 	accessOfPage := accesses[page]
 	chart := Chart{}
 
@@ -39,4 +46,11 @@ func NewPlotter(s storage.Storage) *Plotter {
 	return &Plotter{
 		s: s,
 	}
+}
+
+func abs(n int) int {
+	if n < 0 {
+		return -n
+	}
+	return n
 }

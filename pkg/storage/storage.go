@@ -1,7 +1,5 @@
 package storage
 
-import "fmt"
-
 type Storage interface {
 	Store(group string, v interface{})
 	Read(group string) interface{}
@@ -13,8 +11,6 @@ type InMemory struct {
 }
 
 func (s *InMemory) Store(group string, v interface{}) {
-	fmt.Println(v)
-	fmt.Println(group)
 	s.data[group] = v
 }
 

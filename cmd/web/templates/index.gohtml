@@ -16,6 +16,7 @@
           <li>Acess</li>
           <li>Reports</li>
           <li>Export</li>
+          <li>Install on your page</li>
         </ul>
       </div>
       <div class="content">
@@ -32,38 +33,38 @@
       <script>
         var ctx = document.getElementById('accessChart').getContext('2d');
         var myChart = new Chart(ctx, {
-  type: 'line',
-  data: {
-    datasets: [{
-      label: "Access",
-    borderColor: 'blue',
-    data: [
-    {{range $i, $e := .Data}}
-      {
-      y:{{index $.Data $i}},
-      x:{{index $.Label $i}}
-      },
-    {{end}}]
-    }]
-  },
-  options: {
-    scales: {
-      xAxes: [{
-        type: 'time',
-        time: {
-          unit: 'minute',
-          round: "second",
+        type: 'line',
+        data: {
+          datasets: [{
+            label: "Access",
+          borderColor: 'blue',
+          data: [
+          {{range $i, $e := .Data}}
+            {
+            y:{{index $.Data $i}},
+            x:{{index $.Label $i}}
+            },
+          {{end}}]
+          }]
         },
-        distribution: 'linear'
-      }],
-      yAxes: [{
-                ticks: {
-                    beginAtZero: true
-                }
-            }]
-    }
-  }
-});
+        options: {
+          scales: {
+            xAxes: [{
+              type: 'time',
+              time: {
+                unit: 'minute',
+                round: "second",
+              },
+              distribution: 'linear'
+            }],
+            yAxes: [{
+                      ticks: {
+                          beginAtZero: true
+                      }
+                  }]
+          }
+        }
+      });
 
     </script>
 
