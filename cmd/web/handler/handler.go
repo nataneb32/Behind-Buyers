@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"time"
 
-	"../../../pkg/times_accessed"
+	"../../../pkg/timespend"
 
 	"../../../pkg/access"
 	"../../../pkg/click"
@@ -20,7 +20,7 @@ import (
 type Handler struct {
 	reportObserver *observer.ReportObserver
 	access         *access.Listener
-	times_accessed *times_accessed.Listener
+	timespend      *timespend.Listener
 	click          *click.Listener
 	accessPlotter  *access.Plotter
 	s              storage.Storage
@@ -48,15 +48,15 @@ func NewHandler() *Handler {
 	h := &Handler{
 		reportObserver: observer.CreateReportObserver(),
 		access:         access.CreateListener(s),
-		times_accessed: times_accessed.CreateListener(s),
+		timespend:      timespend.CreateListener(s),
 		click:          click.CreateListener(s),
 		accessPlotter:  access.NewPlotter(s),
 		s:              s,
 	}
 
 	h.reportObserver.Subscribe(h.access)
-	h.reportObserver.Subscribe(h.times_accessed)
 	h.reportObserver.Subscribe(h.click)
+	h.reportObserver.Subscribe(h.timespend)
 
 	return h
 }

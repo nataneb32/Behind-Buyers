@@ -1,4 +1,4 @@
-package times_accessed
+package timespend
 
 import (
 	"../storage"
@@ -9,14 +9,14 @@ type Listener struct {
 }
 
 func (l *Listener) Notify(report map[string]interface{}) {
-	if times, ok := report["times_accessed"].(float64); ok {
+	if times, ok := report["timespend"].(float64); ok {
 		if page, ok := report["page"].(string); ok {
-			if old, ok := l.s.Read("times_accesed").(map[string]map[int]int); ok {
+			if old, ok := l.s.Read("timespend").(map[string]map[int]int); ok {
 				old[page][int(times)]++
 
-				l.s.Store("times_accesed", old)
+				l.s.Store("timespend", old)
 			} else {
-				l.s.Store("times_accesed", map[string]map[int]int{
+				l.s.Store("timespend", map[string]map[int]int{
 					page: map[int]int{
 						int(times): 1,
 					},
