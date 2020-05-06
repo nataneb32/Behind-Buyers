@@ -20,8 +20,10 @@ body {
 }
 
 .sidebar {
+  display: flex;
   height: 100vh;
   position: sticky;
+  flex-direction: column;
   top:0;
   flex: 1;
   background: hsl(220,60%,19.6%);
@@ -35,6 +37,7 @@ body {
 
 .sidebar ul{
   display: flex;
+  flex: 1;
   flex-direction: column;
   margin: 0;
   padding: 10px;
@@ -70,4 +73,13 @@ body {
   height: 45vh;
   margin: 2.5vh;
   border: 1px solid hsl(185.3,100%,31%);
+}
+
+.menu-active {
+  border-left: 3px solid hsl(185.3,100%,31%);
+  transform: translate(-3px,0);
+}
+
+.menu-spacer {
+  flex: 1;
 }
