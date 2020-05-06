@@ -77,3 +77,14 @@ func (h *Handler) IndexT(w http.ResponseWriter, r *http.Request) {
 	_ = t.ExecuteTemplate(w, "chart", chart)
 
 }
+
+func (h *Handler) LoginTemplate(w http.ResponseWriter, r *http.Request) {
+	chart := h.accessPlotter.PlotChartAccessOfPage("test", 0, int(time.Now().UnixNano()/1e6), 1000*60)
+	t, err := template.New("login.html").ParseFiles("./templates/login.gohtml")
+	if err != nil {
+		fmt.Println(err, t)
+		return
+	}
+	_ = t.ExecuteTemplate(w, "chart", chart)
+
+}

@@ -28,6 +28,7 @@ func setupAPIEndpoints(router *mux.Router) {
 	router.HandleFunc("/", rh.RegisterReport).Methods("POST")
 	router.HandleFunc("/", rh.Index).Methods("GET")
 	router.HandleFunc("/t", rh.IndexT).Methods("GET")
+	router.HandleFunc("/login", rh.LoginTemplate).Methods("GET")
 
 }
 
