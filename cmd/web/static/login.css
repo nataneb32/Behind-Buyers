@@ -1,0 +1,46 @@
+body, html {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  font-family: Jost;
+  font-size: 18px;
+}
+body {
+  background: hsl(220,70%,50%);
+}
+.login{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 600px;
+  height: 400px;
+}
+.login-form{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.login-btn {
+  background: hsl(220,80%,30%);
+  color: hsl(220,20%,90%);
+  box-shadow:  0px .2px 3px .2px rgba(0,0,0,0.75);
+  font-weight: bold;
+  width: 100px;
+  padding: 10px;
+  margin: 10px;
+  border: none;
+}
+
+.login-input{
+  padding: 5px;
+  border: 1px solid hsl(220,90%,25%);
+  box-shadow:  0px .2px 3px .2px rgba(0,0,0,0.75);
+  font-size: 18px;
+  margin: 5px;
+}
