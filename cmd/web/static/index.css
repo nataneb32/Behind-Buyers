@@ -58,21 +58,18 @@ body {
   flex: 1;
   height: 45vh;
   margin: 2.5vh;
-  border: 1px solid hsl(185.3,100%,31%);
 }
 
 .graph-2{
   flex: 1;
   height: 45vh;
   margin: 2.5vh;
-  border: 1px solid hsl(185.3,100%,31%);
 }
 
 .graph-3{
   flex: 1;
   height: 45vh;
   margin: 2.5vh;
-  border: 1px solid hsl(185.3,100%,31%);
 }
 
 .menu-active {

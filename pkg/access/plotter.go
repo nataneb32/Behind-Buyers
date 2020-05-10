@@ -1,6 +1,11 @@
 package access
 
-import "../storage"
+import (
+	"fmt"
+	"sort"
+
+	"../storage"
+)
 
 type Chart struct {
 	Label []int
@@ -11,32 +16,59 @@ type Plotter struct {
 	s storage.Storage
 }
 
-func (a *Plotter) PlotChartAccessOfPage(page string, from int, to int, steps int32) Chart { // Isso deveria sair daqui. Criar um PlotterClass
+func removeFromIndex(array []int, rindex []int) []int {
+	sort.Ints(array)
+	for weight, index := range rindex {
+		if index-weight < len(array) {
+			array = append(array[:index-weight], array[index-weight+1:]...)
+		} else {
+			array = array[:index-weight]
+		}
+	}
+	return array
+}
+
+func (a *Plotter) PlotChartAccessOfPage(page string, from int, to int, steps int) Chart { // Isso deveria sair daqui. Criar um PlotterClass
 	accesses, ok := a.s.Read("access").(map[string]Accesses)
 
 	if !ok {
 		return Chart{Label: []int{}, Data: []int{}}
 	}
 
-	accessOfPage := accesses[page]
+	accessOfPage := make([]int, len(accesses[page]))
+	copy(accessOfPage, accesses[page])
 	chart := Chart{}
+	from = (from / steps) * steps
+	to = (to/steps)*steps + steps
 
-	for i := 0; i < len(accessOfPage); i++ {
-		if accessOfPage[i] < from {
-			continue
+	rindex := make([]int, 0)
+
+	for index, timeOfAccess := range accessOfPage {
+		if timeOfAccess < from {
+			rindex = append(rindex, index)
 		}
-		if accessOfPage[i] > to {
-			continue
+	}
+	accessOfPage = removeFromIndex(accessOfPage, rindex)
+	rindex = []int{}
+
+	for i := from; i < to; i += steps {
+		chart.Label = append(chart.Label, i)
+		chart.Data = append(chart.Data, 0)
+		for index, timeOfAccess := range accessOfPage {
+			if timeOfAccess == 0 {
+				continue
+			}
+			fmt.Println(timeOfAccess < i)
+			fmt.Printf("From: %i \n", from)
+			fmt.Printf("From/Steps: %i \n", from/steps)
+
+			if timeOfAccess <= i+steps {
+				rindex = append(rindex, index)
+				chart.Data[len(chart.Data)-1]++
+				fmt.Println(timeOfAccess)
+			}
 		}
-		if len(chart.Label) == 0 {
-			chart.Label = append(chart.Label, accessOfPage[i])
-			chart.Data = append(chart.Data, 1)
-		} else if abs(chart.Label[len(chart.Label)-1]-accessOfPage[i]) >= int(steps) {
-			chart.Label = append(chart.Label, accessOfPage[i])
-			chart.Data = append(chart.Data, 1)
-		} else {
-			chart.Data[len(chart.Data)-1]++
-		}
+		accessOfPage = removeFromIndex(accessOfPage, rindex)
 	}
 
 	return chart
