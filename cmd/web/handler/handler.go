@@ -62,13 +62,15 @@ func NewHandler() *Handler {
 }
 
 func (h *Handler) Index(w http.ResponseWriter, r *http.Request) {
-	chart := h.s.GetRaw()
+	chart := h.accessPlotter.PlotChartAccessOfPage("test", int(time.Now().UnixNano()/1e6)-60*1000*60, int(time.Now().UnixNano()/1e6), 1000*60)
+	fmt.Println(chart)
 	response, _ := json.Marshal(chart)
 	w.Write(response)
 }
 
 func (h *Handler) IndexT(w http.ResponseWriter, r *http.Request) {
-	chart := h.accessPlotter.PlotChartAccessOfPage("test", int(time.Now().UnixNano()/1e6)-60*1000, int(time.Now().UnixNano()/1e6), 1000*60)
+	chart := h.accessPlotter.PlotChartAccessOfPage("test", int(time.Now().UnixNano()/1e6)-60*1000*10, int(time.Now().UnixNano()/1e6), 1000*60)
+	fmt.Println(chart)
 	t, err := template.New("index.html").ParseFiles("./templates/index.gohtml")
 	if err != nil {
 		fmt.Println(err, t)

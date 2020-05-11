@@ -1,6 +1,7 @@
 package access
 
 import (
+	"fmt"
 	"testing"
 
 	"../storage"
@@ -21,6 +22,6 @@ func TestPlotChart(t *testing.T) {
 	)
 
 	data := plotter.PlotChartAccessOfPage("test", 1, 10, 5)
-
-	assert.Equal(Chart{Data: []int{5, 4}, Label: []int{1, 6}}, data)
+	fmt.Println(data)
+	assert.Equal(Chart{Point{0, 6}, Point{5, 4}, Point{10, 1}}, data)
 }

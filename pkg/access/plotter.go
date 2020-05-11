@@ -7,24 +7,30 @@ import (
 	"../storage"
 )
 
-type Chart struct {
-	Label []int
-	Data  []int
+type Point struct {
+	X int `json:"x"`
+	Y int `json:"y"`
 }
+type Chart = []Point
 
 type Plotter struct {
 	s storage.Storage
 }
 
 func removeFromIndex(array []int, rindex []int) []int {
-	sort.Ints(array)
+	sort.Ints(rindex)
+	fmt.Println(rindex)
+
 	for weight, index := range rindex {
-		if index-weight < len(array) {
+		if index-weight < 0 {
+
+		} else if index-weight < len(array) {
 			array = append(array[:index-weight], array[index-weight+1:]...)
 		} else {
 			array = array[:index-weight]
 		}
 	}
+	rindex = []int{}
 	return array
 }
 
@@ -32,7 +38,7 @@ func (a *Plotter) PlotChartAccessOfPage(page string, from int, to int, steps int
 	accesses, ok := a.s.Read("access").(map[string]Accesses)
 
 	if !ok {
-		return Chart{Label: []int{}, Data: []int{}}
+		return Chart{}
 	}
 
 	accessOfPage := make([]int, len(accesses[page]))
@@ -52,23 +58,17 @@ func (a *Plotter) PlotChartAccessOfPage(page string, from int, to int, steps int
 	rindex = []int{}
 
 	for i := from; i < to; i += steps {
-		chart.Label = append(chart.Label, i)
-		chart.Data = append(chart.Data, 0)
+		point := Point{X: i, Y: 0}
 		for index, timeOfAccess := range accessOfPage {
-			if timeOfAccess == 0 {
-				continue
-			}
-			fmt.Println(timeOfAccess < i)
-			fmt.Printf("From: %i \n", from)
-			fmt.Printf("From/Steps: %i \n", from/steps)
-
 			if timeOfAccess <= i+steps {
 				rindex = append(rindex, index)
-				chart.Data[len(chart.Data)-1]++
+				point.Y++
 				fmt.Println(timeOfAccess)
 			}
 		}
 		accessOfPage = removeFromIndex(accessOfPage, rindex)
+		rindex = []int{}
+		chart = append(chart, point)
 	}
 
 	return chart
