@@ -10,8 +10,7 @@
     <script language="javascript" type="text/javascript" src="/static/js/jquery.flot.min.js"></script>
     <script language="javascript" type="text/javascript" src="/static/js/jquery.flot.time.min.js"></script>
     <script language="javascript" type="text/javascript" src="/static/js/chart.js"></script>
-
-
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   </head>
   <body>
       <div class="sidebar">
@@ -42,20 +41,20 @@
       </div>
       <script>
 
-      timeChart("#accessChart",
-      [
-        {{range $point := .}}
-        [
-            {{$point.X}},
-            {{$point.Y}}
-        ],
-        {{end}}
-      ]
-      )
-      useTooltip("#accessChart","#tooltip")
+      axios.post("/api/chart",{
+        "page": "test",
+        "to": Date.now(),
+        "from": Date.now() - 60 * 1000 * 60,
+        "steps":  5*60*1000
+      }).then(function( res ) {
+        timeChart("#accessChart", res.data.map((el)=>Object.values(el)))
+        useTooltip("#accessChart","#tooltip")
+        console.log(res.data)
+      })
+      .catch((err) => console.log(err));
+      
 
     </script>
-
   </body>
 </html>
 {{end}}

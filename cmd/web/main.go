@@ -29,6 +29,7 @@ func setupAPIEndpoints(router *mux.Router) {
 	router.HandleFunc("/", rh.Index).Methods("GET")
 	router.HandleFunc("/t", rh.IndexT).Methods("GET")
 	router.HandleFunc("/login", rh.LoginTemplate).Methods("GET")
+	router.HandleFunc("/api/chart", rh.AccessApiChart).Methods("POST")
 
 }
 

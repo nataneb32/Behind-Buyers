@@ -11,17 +11,21 @@ type Listener struct {
 func (l *Listener) Notify(report map[string]interface{}) {
 	if times, ok := report["timespend"].(float64); ok {
 		if page, ok := report["page"].(string); ok {
-			if old, ok := l.s.Read("timespend").(map[string]map[int]int); ok {
-				old[page][int(times)]++
+			var old map[string]map[int]int
+			l.s.Read("timespend", &old)
 
-				l.s.Store("timespend", old)
-			} else {
+			if old == nil {
 				l.s.Store("timespend", map[string]map[int]int{
 					page: map[int]int{
 						int(times): 1,
 					},
 				})
+				return
 			}
+
+			old[page][int(times)]++
+			l.s.Store("timespend", old)
+
 		}
 	}
 }

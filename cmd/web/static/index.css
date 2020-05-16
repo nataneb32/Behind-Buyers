@@ -83,7 +83,7 @@ body {
 
 #tooltip{
   position: absolute;
-  display: block;
+  display: none;
   top: 0;
   left:50%;
   border: 1px solid black;

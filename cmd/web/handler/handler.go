@@ -5,7 +5,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"html/template"
+	"io/ioutil"
+	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 	"time"
 
 	"../../../pkg/timespend"
@@ -42,8 +46,45 @@ func (h *Handler) RegisterReport(w http.ResponseWriter, r *http.Request) {
 	w.Write(response)
 }
 
+type AccessChartRequest struct {
+	Page  string `json:"page"`
+	From  int    `json:"from"`
+	To    int    `json:"to"`
+	Steps int    `json:"steps"`
+}
+
+func (h *Handler) AccessApiChart(w http.ResponseWriter, r *http.Request) {
+
+	b, err := ioutil.ReadAll(r.Body)
+	defer r.Body.Close()
+	if err != nil {
+		http.Error(w, err.Error(), 500)
+		return
+	}
+
+	var req AccessChartRequest
+	err = json.Unmarshal(b, &req)
+	if err != nil {
+		http.Error(w, err.Error(), 500)
+		return
+	}
+
+	fmt.Println(req)
+
+	chart := h.accessPlotter.PlotChartAccessOfPage(req.Page, int(req.From), int(req.To), int(req.Steps))
+	fmt.Println(chart)
+	output, _ := json.Marshal(chart)
+	w.Write(output)
+}
+
 func NewHandler() *Handler {
-	s := storage.NewInMemory()
+	currentPath, err := os.Getwd()
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	s := storage.NewFileStorage(filepath.Join(currentPath, "storage"))
 
 	h := &Handler{
 		reportObserver: observer.CreateReportObserver(),

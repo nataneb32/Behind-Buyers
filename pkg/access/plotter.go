@@ -35,11 +35,8 @@ func removeFromIndex(array []int, rindex []int) []int {
 }
 
 func (a *Plotter) PlotChartAccessOfPage(page string, from int, to int, steps int) Chart { // Isso deveria sair daqui. Criar um PlotterClass
-	accesses, ok := a.s.Read("access").(map[string]Accesses)
-
-	if !ok {
-		return Chart{}
-	}
+	var accesses map[string]Accesses
+	a.s.Read("access", &accesses)
 
 	accessOfPage := make([]int, len(accesses[page]))
 	copy(accessOfPage, accesses[page])

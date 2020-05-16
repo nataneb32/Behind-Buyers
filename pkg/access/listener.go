@@ -14,15 +14,15 @@ type Listener struct {
 }
 
 func (a *Listener) GetData() map[string]Accesses {
-	if accesses, ok := a.data.Read("access").(map[string]Accesses); ok {
-		return accesses
-	}
-	return nil
+	var accesses map[string]Accesses
+	a.data.Read("access", &accesses)
+	return accesses
 }
 
 func (a *Listener) store(page string, timeInMilliseconds int) {
-	old, ok := a.data.Read("access").(map[string][]int)
-	if !ok {
+	var old map[string]Accesses
+	a.data.Read("access", &old)
+	if old == nil {
 		old = make(map[string][]int)
 	}
 	new := old

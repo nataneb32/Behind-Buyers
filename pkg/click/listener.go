@@ -13,9 +13,10 @@ type Listener struct {
 func (l *Listener) Notify(report map[string]interface{}) {
 	if clicks, ok := report["clicks"].(map[string]interface{}); ok {
 		fmt.Println(clicks)
-		storedValue, hasStoredValue := l.s.Read("clicks").(map[string]int)
+		var storedValue map[string]int
+		l.s.Read("clicks", &storedValue)
 
-		if !hasStoredValue {
+		if storedValue == nil {
 			storedValue = make(map[string]int)
 		}
 

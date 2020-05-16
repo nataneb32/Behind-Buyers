@@ -2,7 +2,7 @@ package storage
 
 type Storage interface {
 	Store(group string, v interface{})
-	Read(group string) interface{}
+	Read(group string, to interface{})
 	GetRaw() map[string]interface{}
 }
 
@@ -14,8 +14,8 @@ func (s *InMemory) Store(group string, v interface{}) {
 	s.data[group] = v
 }
 
-func (s *InMemory) Read(group string) interface{} {
-	return s.data[group]
+func (s *InMemory) Read(group string, to interface{}) {
+	to = s.data[group]
 }
 
 func (s *InMemory) GetRaw() map[string]interface{} {
